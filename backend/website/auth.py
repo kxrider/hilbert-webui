@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, mail
 from flask_login import login_user, login_required, logout_user, current_user
+from flask_mail import Message
 
 # same idea as views, but auth separate
 
@@ -18,6 +19,11 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Successfully logged in!', category='s')
                 login_user(user, remember=True)
+                mail.send(Message(
+                    subject='Hilbert Login Test',
+                    recipients=['ethan.t.martin@outlook.com'],
+                    body='This is just a quick test'
+                ))
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password.', category='e')
@@ -59,7 +65,23 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='s')
-            login_user(user, remember=True)
+            
+            adminMsg = Message(
+                subject='Attempted sign-up from "' + firstName + '".',
+                recipients=['ethan.t.martin@outlook.com'], # maybe change to all admins at some point?
+                html=render_template('admin_notif_sign_up.html', name=firstName, email=email)
+            )
+            
+            userMsg = Message(
+                subject='Hilbert Server registration',
+                recipients=[email],
+                html=render_template('sign_up_email.html', name=firstName)
+            )
+            
+            mail.send(adminMsg)
+            mail.send(userMsg)
+            
+            login_user(new_user, remember=True)
             return redirect(url_for('views.home'))
             
             

@@ -2,15 +2,28 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager, login_manager
+from flask_mail import Mail, Message
 
 db = SQLAlchemy()
+mail = Mail()
 DB_NAME = 'database.db' #test change
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'aoiejwg oaiewg'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    
+    app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USERNAME'] = 'e5583a58eacff3'
+    app.config['MAIL_PASSWORD'] = 'e4ab99ace109cb'
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_DEFAULT_SENDER'] = 'johndoe@hilbertserver.com'
+    app.config['MAIL_DEBUG'] = True
+    app.config['MAIL_SUPPRESS_SEND'] = False
     db.init_app(app)
+    mail.init_app(app)
 
     from .views import views
     from .auth import auth
