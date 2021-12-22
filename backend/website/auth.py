@@ -19,11 +19,6 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Successfully logged in!', category='s')
                 login_user(user, remember=True)
-                mail.send(Message(
-                    subject='Hilbert Login Test',
-                    recipients=['ethan.t.martin@outlook.com'],
-                    body='This is just a quick test'
-                ))
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password.', category='e')
@@ -68,7 +63,7 @@ def signup():
             
             adminMsg = Message(
                 subject='Attempted sign-up from "' + firstName + '".',
-                recipients=['ethan.t.martin@outlook.com'], # maybe change to all admins at some point?
+                recipients=['ethan.t.martin@outlook.com'], # def change to all admins at some point
                 html=render_template('admin_notif_sign_up.html', name=firstName, email=email)
             )
             
