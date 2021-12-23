@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}Changed{% endblock %}
+{% block title %}Hilbert_Web-UI{% endblock %}
 {% block content %}<h1>This is the homepage</h1>
 
 {% if boolean == True %}
 {{ idkvar }} Ethan!
 {% endif %}
-
+<img src="static\halo.png">
+<div id="terminal"></div>
+      <script>
+        var term = new Terminal();
+        term.open(document.getElementById('terminal'));
+        term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ')
+      </script>
 {% endblock %}

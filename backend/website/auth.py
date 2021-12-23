@@ -63,7 +63,7 @@ def signup():
             
             adminMsg = Message(
                 subject='Attempted sign-up from "' + firstName + '".',
-                recipients=['ethan.t.martin@outlook.com'], # def change to all admins at some point
+                recipients=['ethan.t.martin@outlook.com', 'justinrskweres@yahoo.com'], # def change to all admins at some point
                 html=render_template('admin_notif_sign_up.html', name=firstName, email=email)
             )
             
