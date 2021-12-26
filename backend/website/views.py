@@ -11,9 +11,14 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     #return '<h1>Test</h1>'
-    return render_template('home.html', user=current_user)
+    return render_template('home.html', user=current_user, userName = current_user.firstName)
 
 @views.route('/aussie')
 @login_required
 def aussie():
-    return render_template('aussie.html', user=current_user)
+    return render_template('aussie.html', user=current_user, userName = current_user.firstName)
+
+@views.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', user=current_user, userName = current_user.firstName)
