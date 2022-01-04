@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}Aussie{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block content %}<h1>Your Profile</h1>
 
+    <style>
+    table, th, td{
+        background-color: rgb(255, 255, 255);
+        padding: 5px;
+        border: 2px solid rgb(0, 0, 0);
+    }
+    </style>
+
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Admin Status</th>
+      </tr>
+      <tr>
+        <td>{{user.firstName}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.admin}}</td>
+      </tr>
+    </table>
 
 {% endblock %}

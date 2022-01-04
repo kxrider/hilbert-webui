@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Administration{% endblock %}
+{% block content %}<h1>Administration Terminal</h1>
+
+    <script>
+        let adminId = "";
+        let buttonId = "";
+        let count = 0;
+    </script>
+
+    <style>
+        .myLabel {
+            margin-right: 72px;
+        }
+        .myLabel2 {
+            margin-right: 265px;
+        }
+        .profileText {
+            width: 100px;
+        }
+        .emailText {
+            width: 300px;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+          
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            height: 60%;
+        }
+          
+        /* The Close Button */
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 20px;
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+          
+        .close:hover {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn{
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 80px;
+        }
+    </style>
+
+    <form method='POST'>
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <p id="modalInner"></p>
+                <span class="close" onclick=closeModal()>&times;</span>
+                <input type='checkbox' id='modalAdmin' name='modalAdmin'>
+                <input type='text' id='test' name='test'>
+                <button type='submit' class='btn btn-primary'>Submit</button>
+            </div>
+        
+        </div>
+    </form>
+
+    <label class=myLabel>Profile</label><label class=myLabel2>Email</label><label>Admin</label><br>
+
+    {% for eachuser in userlist %}
+
+        <script>
+            adminId = "admin" + count.toString();
+            buttonId = "button" + count.toString();
+        </script>
+
+        <input type='text' class='profileText' disabled value='{{eachuser.firstName}}'>&nbsp;&nbsp;&nbsp;
+        <input type='text' class='emailText' disabled value='{{eachuser.email}}'>&nbsp;&nbsp;&nbsp;
+        <input type='checkbox' disabled id='adminId'>&nbsp;&nbsp;&nbsp;
+        <button id='buttonId' onclick=openModal(this.id)>Edit</button><br><br>
+
+        <script>
+            document.getElementById("adminId").id = adminId;
+            document.getElementById("buttonId").id = buttonId;
+
+            document.getElementById(buttonId).onclick = function(){
+                if ("{{eachuser.admin}}" =='True') {
+                    document.getElementById("modalAdmin").checked = true;
+                } else {
+                    document.getElementById("modalAdmin").checked = false;
+                }
+                document.getElementById("modalInner").innerHTML = "Permissions for " + "{{eachuser.firstName}}";
+                document.getElementById("myModal").style.display = "block";
+            }
+
+            if ('{{eachuser.admin}}'=='True') {
+                document.getElementById(adminId).checked = true;
+            } else {
+                document.getElementById(adminId).checked = false;
+            }
+        count = count + 1;
+        </script>
+    {% endfor %}
+    <script>
+        function closeModal(){
+            document.getElementById("myModal").style.display = "none";
+        }
+    </script>
+
+{% endblock %}

@@ -71,7 +71,7 @@
 
 	<h4>Input</h4>
 
-	<input type="text" id="input" name="input" value="">
+	<input type="text" disabled id="input" name="input" value="">
 
 	<script>
 
@@ -89,6 +89,11 @@
 		pxs = rowsToPixel(rows2, cols2);
 		input.style.width = pxs[0].toString() + "px";
 		input.style.height = pxs[1].toString() + "px";
+		if ("{{current_user.admin}}"=='True') {
+			input.disabled = false;
+		} else {
+			input.disabled = true;
+		}
 
 		input.addEventListener("keyup", function(event) {
   			if (event.keyCode === 13) {
