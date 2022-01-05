@@ -17,6 +17,9 @@
         function closeModal(){
             document.getElementById("myModal").style.display = "none";
         }
+        function deleteUser(){
+            document.getElementById("modalDelete").value = "True";
+        }
     </script>
 
     <style>
@@ -71,11 +74,24 @@
             text-decoration: none;
             cursor: pointer;
         }
-        .btn{
+        .submit{
             position: absolute;
             right: 20px;
             bottom: 20px;
-            width: 80px;
+        }
+        .delete{
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            background-color: rgb(192, 0, 0);
+            border-color:rgb(0, 0, 0);
+        }
+        .delete:hover{
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            background-color: rgb(192, 0, 0);
+            border-color:rgb(0, 0, 0);
         }
         .edit{
             color: rgb(0, 0, 0);
@@ -103,7 +119,8 @@
                 <input type='checkbox' id='modalInput' name='modalInput'><br>
                 <label>Can Create Servers</label>
                 <input type='checkbox' id='modalServers' name='modalServers'><br>
-                <button type='submit' class='btn btn-primary'>Submit</button>
+                <button type='submit' class='btn btn-primary submit'>Submit</button>
+                <button type='submit' id="modalDelete" name="modalDelete" class='btn btn-primary delete' value="False" onclick=deleteUser()>Delete User</button>
                 <input type='hidden' id="userEmail" name='userEmail'>
             </div>
         

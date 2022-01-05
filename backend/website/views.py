@@ -13,9 +13,9 @@ def load_all_users():
     return User.query.all()
 
 def formToBool(x):
-    if (x=="on"):
+    if (x=="on" or x=="True"):
         return True
-    elif (x==None):
+    elif (x==None or x=="False"):
         return False
 
 # this is where we put "routes" i.e. the pages our user can visit
@@ -58,7 +58,11 @@ def admin():
             load_user(userEmail).viewConsole = formToBool(modalConsole)
             load_user(userEmail).typeInput = formToBool(modalInput)
             load_user(userEmail).createServer = formToBool(modalServers)
+            modalDelete = request.form.get('modalDelete')
+            if formToBool(modalDelete):
+                db.session.delete(load_user(userEmail))
             db.session.commit()
+            return redirect(url_for('views.admin'))
 
         return render_template('admin.html', user=current_user, userName=current_user.firstName, userlist=users)
     else:
