@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from .models import User
+from . import db
 
 login_manager = LoginManager()
 
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter_by(firstName=user_id).first()
+def load_user(user_email):
+    return User.query.filter_by(email=user_email).first()
 
 def load_all_users():
     return User.query.all()
@@ -39,7 +40,12 @@ def admin():
         users = load_all_users()
         if request.method == 'POST':
             test = request.form.get('test')
-            flash(test, category="s")
+            modalAdmin = request.form.get('modalAdmin')
+            if (modalAdmin=="on"):
+                load_user(test).admin = True
+            else:
+                load_user(test).admin = False
+            db.session.commit()
 
         return render_template('admin.html', user=current_user, userName=current_user.firstName, userlist=users)
     else:
