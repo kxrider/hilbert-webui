@@ -2,8 +2,15 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, mail
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from flask_mail import Message
+
+login_manager = LoginManager()
+
+@login_manager.user_loader
+
+def load_all_users():
+    return User.query.all()
 
 # same idea as views, but auth separate
 
@@ -60,10 +67,15 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='s')
-            
+
+            admins = []
+            for eachuser in load_all_users():
+                if eachuser.admin:
+                    admins.append(eachuser.email)
+
             adminMsg = Message(
                 subject='Attempted sign-up from "' + firstName + '".',
-                recipients=['ethan.t.martin@outlook.com', 'justinrskweres@yahoo.com'], # def change to all admins at some point
+                recipients=admins,
                 html=render_template('admin_notif_sign_up.html', name=firstName, email=email)
             )
             
