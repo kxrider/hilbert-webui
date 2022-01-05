@@ -89,7 +89,7 @@
 		pxs = rowsToPixel(rows2, cols2);
 		input.style.width = pxs[0].toString() + "px";
 		input.style.height = pxs[1].toString() + "px";
-		if ("{{current_user.admin}}"=='True') {
+		if ("{{current_user.typeInput}}"=='True') {
 			input.disabled = false;
 		} else {
 			input.disabled = true;

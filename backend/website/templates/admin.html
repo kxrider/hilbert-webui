@@ -7,6 +7,16 @@
         let buttonId = "";
         let count = 0;
         let user = "";
+        function checkBool(x) { 
+            if(x=="True") {
+                return true;
+            } else if (x=="False") {
+                return false;
+            } 
+        }
+        function closeModal(){
+            document.getElementById("myModal").style.display = "none";
+        }
     </script>
 
     <style>
@@ -27,8 +37,6 @@
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
             padding-top: 100px; /* Location of the box */
-            left: 0;
-            top: 0;
             width: 100%; /* Full width */
             height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
@@ -42,7 +50,7 @@
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 50%;
+            width: 30%;
             height: 60%;
         }
           
@@ -85,11 +93,18 @@
 
             <!-- Modal content -->
             <div class="modal-content">
-                <p id="modalInner" value="hello"></p>
+                <p id="modalInner"></p>
                 <span class="closing" onclick=closeModal()>&times;</span>
-                <input type='checkbox' id='modalAdmin' name='modalAdmin'>
+                <label>Is Administrator</label>
+                <input type='checkbox' id='modalAdmin' name='modalAdmin'><br>
+                <label>Can View Console</label>
+                <input type='checkbox' id='modalConsole' name='modalConsole'><br>
+                <label>Can Send Commands</label>
+                <input type='checkbox' id='modalInput' name='modalInput'><br>
+                <label>Can Create Servers</label>
+                <input type='checkbox' id='modalServers' name='modalServers'><br>
                 <button type='submit' class='btn btn-primary'>Submit</button>
-                <input type='hidden' id="test" name='test'>
+                <input type='hidden' id="userEmail" name='userEmail'>
             </div>
         
         </div>
@@ -114,30 +129,20 @@
             document.getElementById("buttonId").id = buttonId;
 
             document.getElementById(buttonId).onclick = function(){
-                if ("{{eachuser.admin}}" =='True') {
-                    document.getElementById("modalAdmin").checked = true;
-                } else {
-                    document.getElementById("modalAdmin").checked = false;
-                }
+                document.getElementById("modalAdmin").checked = checkBool("{{eachuser.admin}}");
+                document.getElementById("modalConsole").checked = checkBool("{{eachuser.viewConsole}}");
+                document.getElementById("modalInput").checked = checkBool("{{eachuser.typeInput}}");
+                document.getElementById("modalServers").checked = checkBool("{{eachuser.createServer}}");
+
                 document.getElementById("modalInner").innerHTML = "Permissions for " + "{{eachuser.firstName}}";
                 document.getElementById("myModal").style.display = "block";
-
                 user = "{{eachuser.email}}";
-                document.getElementById("test").value = user;
+                document.getElementById("userEmail").value = user;
             }
-
-            if ('{{eachuser.admin}}'=='True') {
-                document.getElementById(adminId).checked = true;
-            } else {
-                document.getElementById(adminId).checked = false;
-            }
-        count = count + 1;
+            document.getElementById(adminId).checked = checkBool("{{eachuser.admin}}");
+            count = count + 1;
         </script>
+
     {% endfor %}
-    <script>
-        function closeModal(){
-            document.getElementById("myModal").style.display = "none";
-        }
-    </script>
 
 {% endblock %}

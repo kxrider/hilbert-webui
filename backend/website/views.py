@@ -12,6 +12,12 @@ def load_user(user_email):
 def load_all_users():
     return User.query.all()
 
+def formToBool(x):
+    if (x=="on"):
+        return True
+    elif (x==None):
+        return False
+
 # this is where we put "routes" i.e. the pages our user can visit
 
 # define that this is a blueprint
@@ -21,7 +27,11 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    return render_template('home.html', user=current_user, userName=current_user.firstName)
+    if current_user.viewConsole:
+        return render_template('home.html', user=current_user, userName=current_user.firstName)
+    else:
+        flash("Woops! You do not have permission to view the server console, please contact and administrator for assistance.", category="e")
+        return render_template('failure2.html', user=current_user, userName=current_user.firstName)
 
 @views.route('/aussie')
 @login_required
@@ -39,12 +49,15 @@ def admin():
     if current_user.admin:
         users = load_all_users()
         if request.method == 'POST':
-            test = request.form.get('test')
+            userEmail = request.form.get('userEmail')
             modalAdmin = request.form.get('modalAdmin')
-            if (modalAdmin=="on"):
-                load_user(test).admin = True
-            else:
-                load_user(test).admin = False
+            modalConsole = request.form.get('modalConsole')
+            modalInput = request.form.get('modalInput')
+            modalServers = request.form.get('modalServers')
+            load_user(userEmail).admin = formToBool(modalAdmin)
+            load_user(userEmail).viewConsole = formToBool(modalConsole)
+            load_user(userEmail).typeInput = formToBool(modalInput)
+            load_user(userEmail).createServer = formToBool(modalServers)
             db.session.commit()
 
         return render_template('admin.html', user=current_user, userName=current_user.firstName, userlist=users)

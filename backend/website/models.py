@@ -10,4 +10,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     firstName = db.Column(db.String(150))
     admin = db.Column(db.Boolean, default=False)
-    
+    viewConsole = db.Column(db.Boolean, default=False)
+    typeInput = db.Column(db.Boolean, default=False)
+    createServer = db.Column(db.Boolean, default=False)
