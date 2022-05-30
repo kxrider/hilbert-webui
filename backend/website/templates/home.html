@@ -3,106 +3,11 @@
 {% block content %}<h1>Console</h1>
 
 <div id="terminal"></div>
-	<script>
-
-		let rows = 30;
-		let cols = 90;
-
-		
-		function rowsToPixel(rows, cols) {
-    		let heightpx = Math.floor(rows*17.7);
-    		let widthpx = Math.floor(cols*9.15);
-    		return [widthpx, heightpx];
-		}
-
-		let terminal = document.getElementById("terminal");
-		pxs = rowsToPixel(rows, cols);
-		terminal.style.width = pxs[0].toString() + "px";
-		terminal.style.height = pxs[1].toString() + "px";
-		var term = new Terminal({
-			cols: cols,
-			rows: rows
-		});
-		const ws = new WebSocket("ws://localhost:3000", "echo-protocol");
-		var curr_line= "";
-		var entries= [];
-		term.setOption('fontSize', 15);
-		term.setOption('cursorBlink', true);
-		term.setOption('cursorStyle', 'none');
-		term.open(document.getElementById("terminal"));
-		term.write("HilbertServer-$: ");
-		
-		term.prompt = () => {
-			if (curr_line) {
-				let data = { method: "command", command: curr_line};
-				ws.send(JSON.stringify(data));
-			}
-		};
-		term.prompt();
-		
-		ws.onmessage = msg => {
-			term.write("\r\n" + JSON.parse(msg.data).data);
-			curr_line = "";
-		};
-		
-		/*term.on("key", function(key, ev){
-			if (ev.keyCode === 13) {
-				if (curr_line){
-					entries.push(curr_line);
-					term.write("\r\n");
-					term.prompt();
-				}
-			}else if (ev.keyCode === 8){
-				if (curr_line) {
-					curr_line = curr_line.slice(0, curr_line.length - 1);
-					term.write("\b \b");
-				}
-			}else{
-				curr_line += key;
-				term.write(key);
-			}
-			term.on("paste", function(data) {
-				curr_line += data;
-				term.write(data);
-			});
-		});*/
-
-	</script>
 
 	<h4>Input</h4>
 
 	<input type="text" disabled id="input" name="input" value="">
 
-	<script>
-
-		let rows2 = 2;
-		let cols2 = cols;
-	
-			
-		function rowsToPixel(rows, cols) {
-			let heightpx = Math.floor(rows*17.7);
-			let widthpx = Math.floor(cols*9.15);
-			return [widthpx, heightpx];
-		}
-	
-		let input = document.getElementById("input");
-		pxs = rowsToPixel(rows2, cols2);
-		input.style.width = pxs[0].toString() + "px";
-		input.style.height = pxs[1].toString() + "px";
-		if ("{{current_user.typeInput}}"=='True') {
-			input.disabled = false;
-		} else {
-			input.disabled = true;
-		}
-
-		input.addEventListener("keyup", function(event) {
-  			if (event.keyCode === 13) {
-   				event.preventDefault();
-				term.write(input.value);
-				term.write("\r\n" + ">");
-   				input.value = "";
-  			}
-		});
-	</script>
+	<script src="static/terminal.js"></script>
 {% endblock %}
 
